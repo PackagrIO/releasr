@@ -1,0 +1,92 @@
+name: CI
+# This workflow is triggered on pushes to the repository.
+on: [push, pull_request]
+
+jobs:
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    container: golang:1.13
+    env:
+      PROJECT_PATH: /go/src/github.com/packagrio/releasr
+    strategy:
+      matrix:
+        package_type: ['chef', 'golang', 'node', 'python', 'ruby']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build Test Binaries
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          mkdir -p $PROJECT_PATH
+          cp -a $GITHUB_WORKSPACE/* $PROJECT_PATH/
+          cd $PROJECT_PATH
+
+          go mod vendor
+          ./ci/test-build.sh ${{ matrix.package_type }}
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: "test-binary-${{ matrix.package_type }}"
+          path: /caches/test-binaries/
+  test:
+    name: Test
+    needs: build-test
+    runs-on: ubuntu-latest
+    container: "packagrio/packagr:latest-${{ matrix.package_type }}"
+
+    strategy:
+      matrix:
+        package_type: ['chef', 'golang', 'node', 'python', 'ruby']
+    steps:
+      - name: Download test binaries
+        uses: actions/download-artifact@v2
+        with:
+          name: "test-binary-${{ matrix.package_type }}"
+      - name: Test
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          chmod -R +x .
+          ./test-execute.sh ${{ matrix.package_type }}
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage
+          path: /coverage/coverage-${{ matrix.package_type }}.txt
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container: golang:1.13
+    env:
+      PROJECT_PATH: /go/src/github.com/packagrio/releasr
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          mkdir -p $PROJECT_PATH
+          cp -a $GITHUB_WORKSPACE/* $PROJECT_PATH/
+          cd $PROJECT_PATH
+
+          go mod vendor
+
+          go test -v -tags "static" $(go list ./... | grep -v /vendor/)
+
+          go build -ldflags "-X main.goos=linux -X main.goarch=amd64" -o packagr-releasr-linux-amd64 -tags "static" cmd/releasr/releasr.go
+
+          chmod +x packagr-releasr-linux-amd64
+          ./packagr-releasr-linux-amd64 --help
+
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: releasr-binary
+          path: ${{ env.PROJECT_PATH }}/packagr-releasr-linux-amd64
