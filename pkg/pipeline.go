@@ -58,6 +58,16 @@ func (p *Pipeline) Start(configData config.Interface) error {
 		p.PackageManager = manager
 	}
 
+	// validate tools
+	vterr := p.Engine.ValidateTools()
+	if vterr != nil {
+		return vterr
+	}
+	vterr = p.PackageManager.MgrValidateTools()
+	if vterr != nil {
+		return vterr
+	}
+
 	log.Println("mgr_package_step")
 	if err := p.PackageManager.MgrPackageStep(p.Engine.GetNextMetadata()); err != nil {
 		return err
