@@ -6,7 +6,7 @@ jobs:
   build-test:
     name: Build Test
     runs-on: ubuntu-latest
-    container: golang:1.13
+    container: analogj/capsulecd-build
     env:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     strategy:
@@ -61,7 +61,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container: golang:1.13
+    container: analogj/capsulecd-build
     env:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     steps:
