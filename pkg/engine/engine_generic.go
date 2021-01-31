@@ -7,6 +7,9 @@ import (
 	"github.com/packagrio/go-common/scm"
 	"github.com/packagrio/releasr/pkg/config"
 	releasrUtils "github.com/packagrio/releasr/pkg/utils"
+	"io/ioutil"
+	"path"
+	"strings"
 )
 
 type engineGeneric struct {
@@ -25,7 +28,8 @@ func (g *engineGeneric) Init(pipelineData *pipeline.Data, configData config.Inte
 	//set command defaults (can be overridden by repo/system configuration)
 	g.Config.SetDefault(config.PACKAGR_GENERIC_VERSION_TEMPLATE, `version := "%d.%d.%d"`)
 	g.Config.SetDefault(config.PACKAGR_VERSION_METADATA_PATH, "VERSION")
-	return nil
+
+	return g.retrieveCurrentMetadata(pipelineData.GitLocalPath)
 }
 
 func (g *engineGeneric) GetNextMetadata() interface{} {
@@ -50,5 +54,23 @@ func (g *engineGeneric) PackageStep() error {
 
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
+	return nil
+}
+
+//Helpers
+func (g *engineGeneric) retrieveCurrentMetadata(gitLocalPath string) error {
+	//read VERSION file.
+	versionContent, rerr := ioutil.ReadFile(path.Join(gitLocalPath, g.Config.GetString(config.PACKAGR_VERSION_METADATA_PATH)))
+	if rerr != nil {
+		return rerr
+	}
+
+	major := 0
+	minor := 0
+	patch := 0
+	template := g.Config.GetString("generic_version_template")
+	fmt.Sscanf(strings.TrimSpace(string(versionContent)), template, &major, &minor, &patch)
+
+	g.NextMetadata.Version = fmt.Sprintf("%d.%d.%d", major, minor, patch)
 	return nil
 }

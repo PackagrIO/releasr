@@ -11,7 +11,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container: golang:1.13
+    container: analogj/capsulecd-build
     env:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     steps:
@@ -34,7 +34,8 @@ jobs:
           cd $PROJECT_PATH
 
           go mod vendor
-
+          mkdir -p /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/
+          cp /usr/local/linux/lib/pkgconfig/libgit2.pc /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/libgit2.pc
           go test -v -tags "static" $(go list ./... | grep -v /vendor/)
 
           go build -ldflags "-X main.goos=linux -X main.goarch=amd64" -o packagr-releasr-linux-amd64 -tags "static" cmd/releasr/releasr.go

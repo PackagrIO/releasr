@@ -8,9 +8,11 @@ import (
 	"github.com/packagrio/go-common/scm"
 	"github.com/packagrio/releasr/pkg/config"
 	releasrUtils "github.com/packagrio/releasr/pkg/utils"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 )
 
 type enginePython struct {
@@ -28,7 +30,7 @@ func (g *enginePython) Init(pipelineData *pipeline.Data, configData config.Inter
 
 	//set command defaults (can be overridden by repo/system configuration)
 	g.Config.SetDefault(config.PACKAGR_VERSION_METADATA_PATH, "VERSION")
-	return nil
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 func (g *enginePython) GetNextMetadata() interface{} {
@@ -58,5 +60,17 @@ func (g *enginePython) PackageStep() error {
 
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
+	return nil
+}
+
+//private Helpers
+
+func (g *enginePython) retrieveCurrentMetadata(gitLocalPath string) error {
+	//read metadata.json file.
+	versionContent, rerr := ioutil.ReadFile(path.Join(gitLocalPath, g.Config.GetString(config.PACKAGR_VERSION_METADATA_PATH)))
+	if rerr != nil {
+		return rerr
+	}
+	g.NextMetadata.Version = strings.TrimSpace(string(versionContent))
 	return nil
 }

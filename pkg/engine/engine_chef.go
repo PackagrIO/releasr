@@ -1,14 +1,19 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/analogj/go-util/utils"
 	"github.com/packagrio/go-common/errors"
 	"github.com/packagrio/go-common/metadata"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/go-common/scm"
 	"github.com/packagrio/releasr/pkg/config"
-	"github.com/packagrio/releasr/pkg/utils"
+	releasrUtils "github.com/packagrio/releasr/pkg/utils"
+	"io/ioutil"
+	"os"
 	"os/exec"
+	"path"
 )
 
 type engineChef struct {
@@ -23,7 +28,7 @@ func (g *engineChef) Init(pipelineData *pipeline.Data, configData config.Interfa
 	g.PipelineData = pipelineData
 	g.NextMetadata = new(metadata.ChefMetadata)
 
-	return nil
+	return g.retrieveCurrentMetadata(pipelineData.GitLocalPath)
 }
 
 func (g *engineChef) GetNextMetadata() interface{} {
@@ -40,16 +45,16 @@ func (g *engineChef) ValidateTools() error {
 
 func (g *engineChef) PackageStep() error {
 
-	signature := utils.GitSignature(g.Config.GetString("engine_git_author_name"), g.Config.GetString("engine_git_author_email"))
+	signature := releasrUtils.GitSignature(g.Config.GetString("engine_git_author_name"), g.Config.GetString("engine_git_author_email"))
 
-	if cerr := utils.GitCommit(
+	if cerr := releasrUtils.GitCommit(
 		g.PipelineData.GitLocalPath,
 		fmt.Sprintf("(v%s) %s", g.NextMetadata.Version,
 			g.Config.GetString("engine_version_bump_msg")),
 		signature); cerr != nil {
 		return cerr
 	}
-	tagCommit, terr := utils.GitTag(g.PipelineData.GitLocalPath,
+	tagCommit, terr := releasrUtils.GitTag(g.PipelineData.GitLocalPath,
 		fmt.Sprintf("v%s", g.NextMetadata.Version), g.Config.GetString("engine_version_bump_msg"),
 		signature)
 	if terr != nil {
@@ -58,5 +63,28 @@ func (g *engineChef) PackageStep() error {
 
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
+	return nil
+}
+
+//private Helpers
+
+func (g *engineChef) retrieveCurrentMetadata(gitLocalPath string) error {
+	//dat, err := ioutil.ReadFile(path.Join(gitLocalPath, "metadata.rb"))
+	//knife cookbook metadata -o ../ chef-mycookbook -- will generate a metadata.json file.
+	if cerr := utils.BashCmdExec(fmt.Sprintf("knife cookbook metadata -o ../ %s", path.Base(gitLocalPath)), gitLocalPath, nil, ""); cerr != nil {
+		return cerr
+	}
+	defer os.Remove(path.Join(gitLocalPath, "metadata.json"))
+
+	//read metadata.json file.
+	metadataContent, rerr := ioutil.ReadFile(path.Join(gitLocalPath, "metadata.json"))
+	if rerr != nil {
+		return rerr
+	}
+
+	if uerr := json.Unmarshal(metadataContent, g.NextMetadata); uerr != nil {
+		return uerr
+	}
+
 	return nil
 }
