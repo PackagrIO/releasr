@@ -33,8 +33,12 @@ func (c *configuration) Init() error {
 	c.SetDefault(PACKAGR_PACKAGE_TYPE, "generic")
 	c.SetDefault(PACKAGR_SCM, "default")
 
-	c.SetDefault("engine_version_bump_msg", "Automated packaging of release by Packagr")
-	c.SetDefault("mgr_keep_lock_file", "false") //delete *.lock files by default.
+	c.SetDefault(PACKAGR_VERSION_BUMP_MESSAGE, "Automated packaging of release by Packagr")
+	c.SetDefault(PACKAGR_MGR_KEEP_LOCK_FILE, "false") //delete *.lock files by default.
+
+	c.SetDefault(PACKAGR_GIT_AUTHOR_NAME, "Packagr")
+	c.SetDefault(PACKAGR_GIT_AUTHOR_EMAIL, "Packagrio@users.noreply.github.com")
+	c.SetDefault(PACKAGR_ENGINE_REPO_CONFIG_PATH, "packagr.yml")
 
 	//set the default system config file search path.
 	//if you want to load a non-standard location system config file (~/capsule.yml), use ReadConfig

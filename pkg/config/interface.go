@@ -24,10 +24,10 @@ type Interface interface {
 
 const PACKAGR_PACKAGE_TYPE = "package_type"
 const PACKAGR_SCM = "scm"
-const PACKAGR_SCM_REPO_FULL_NAME = "scm_repo_full_name"
 const PACKAGR_VERSION_METADATA_PATH = "version_metadata_path"
 const PACKAGR_VERSION_BUMP_MESSAGE = "engine_version_bump_msg"
 const PACKAGR_GENERIC_VERSION_TEMPLATE = "generic_version_template"
 const PACKAGR_GIT_AUTHOR_NAME = "engine_git_author_name"
 const PACKAGR_GIT_AUTHOR_EMAIL = "engine_git_author_email"
-const PACKAGR_ENGINE_GOLANG_PACKAGE_PATH = "engine_golang_package_path"
+const PACKAGR_ENGINE_REPO_CONFIG_PATH = "engine_repo_config_path"
+const PACKAGR_MGR_KEEP_LOCK_FILE = "mgr_keep_lock_file"

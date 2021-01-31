@@ -42,7 +42,7 @@ func (m *mgrGolangGlide) MgrValidateTools() error {
 }
 
 func (m *mgrGolangGlide) MgrPackageStep(nextMetadata interface{}) error {
-	if !m.Config.GetBool("mgr_keep_lock_file") {
+	if !m.Config.GetBool(config.PACKAGR_MGR_KEEP_LOCK_FILE) {
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "glide.lock"))
 	}
 	return nil

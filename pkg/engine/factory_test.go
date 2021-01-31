@@ -64,8 +64,6 @@ func (suite *FactoryTestSuite) TestCreate_Golang() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github")
-	suite.Config.EXPECT().GetString(config.PACKAGR_SCM_REPO_FULL_NAME).Return("AnalogJ/golang_analogj_test")
-	suite.Config.EXPECT().GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH).Return("github.com/analogj/golang_analogj_test")
 
 	//test
 	testEngine, cerr := engine.Create(engine.PACKAGR_ENGINE_TYPE_GOLANG, suite.PipelineData, suite.Config, suite.Scm)

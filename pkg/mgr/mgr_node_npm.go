@@ -42,7 +42,7 @@ func (m *mgrNodeNpm) MgrValidateTools() error {
 }
 
 func (m *mgrNodeNpm) MgrPackageStep(nextMetadata interface{}) error {
-	if !m.Config.GetBool("mgr_keep_lock_file") {
+	if !m.Config.GetBool(config.PACKAGR_MGR_KEEP_LOCK_FILE) {
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "npm-shrinkwrap.json"))
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "package-lock.json"))
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "yarn.lock"))

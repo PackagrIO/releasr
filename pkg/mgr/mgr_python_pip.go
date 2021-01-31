@@ -44,7 +44,7 @@ func (m *mgrPythonPip) MgrValidateTools() error {
 }
 
 func (m *mgrPythonPip) MgrPackageStep(nextMetadata interface{}) error {
-	if !m.Config.GetBool("mgr_keep_lock_file") {
+	if !m.Config.GetBool(config.PACKAGR_MGR_KEEP_LOCK_FILE) {
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "requirements.txt"))
 	}
 	return nil

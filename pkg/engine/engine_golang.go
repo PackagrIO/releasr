@@ -12,7 +12,6 @@ import (
 	"go/parser"
 	"go/token"
 	"io/ioutil"
-	"os"
 	"os/exec"
 	"path"
 	"strings"
@@ -33,37 +32,6 @@ func (g *engineGolang) Init(pipelineData *pipeline.Data, configData config.Inter
 
 	//set command defaults (can be overridden by repo/system configuration)
 	g.Config.SetDefault(config.PACKAGR_VERSION_METADATA_PATH, "pkg/version/version.go")
-	var scmDomain string
-	if g.Config.GetString(config.PACKAGR_SCM) == "bitbucket" {
-		scmDomain = "bitbucket.org"
-	} else {
-		scmDomain = "github.com"
-	}
-
-	g.Config.SetDefault(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH, fmt.Sprintf("%s/%s", scmDomain, strings.ToLower(g.Config.GetString(config.PACKAGR_SCM_REPO_FULL_NAME))))
-
-	//TODO: figure out why setting the GOPATH workspace is causing the tools to timeout.
-	// golang recommends that your in-development packages are in the GOPATH and glide requires it to do glide install.
-	// the problem with this is that for somereason gometalinter (and the underlying linting tools) take alot longer
-	// to run, and hit the default deadline limit ( --deadline=30s).
-	// we can have multiple workspaces in the gopath by separating them with colon (:), but this timeout is nasty if not required.
-	//TODO: g.GoPath root will not be deleted (its the parent of GitParentPath), figure out if we can do this automatically.
-	g.PipelineData.GolangGoPath = g.PipelineData.GitParentPath
-	os.Setenv("GOPATH", fmt.Sprintf("%s:%s", os.Getenv("GOPATH"), g.PipelineData.GolangGoPath))
-
-	// A proper gopath has a bin and src directory.
-	goPathBin := path.Join(g.PipelineData.GitParentPath, "bin")
-	goPathSrc := path.Join(g.PipelineData.GitParentPath, "src")
-	os.MkdirAll(goPathBin, 0666)
-	os.MkdirAll(goPathSrc, 0666)
-
-	//  the gopath bin directory should aslo be added to Path
-	os.Setenv("PATH", fmt.Sprintf("%s:%s", os.Getenv("PATH"), goPathBin))
-
-	packagePathPrefix := path.Dir(g.Config.GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH)) //strip out the repo name.
-	// customize the git parent path for Golang Engine
-	g.PipelineData.GitParentPath = path.Join(g.PipelineData.GitParentPath, "src", packagePathPrefix)
-	os.MkdirAll(g.PipelineData.GitParentPath, 0666)
 
 	return nil
 }

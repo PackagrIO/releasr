@@ -52,7 +52,7 @@ func (m *mgrChefBerkshelf) MgrValidateTools() error {
 }
 
 func (m *mgrChefBerkshelf) MgrPackageStep(nextMetadata interface{}) error {
-	if !m.Config.GetBool("mgr_keep_lock_file") {
+	if !m.Config.GetBool(config.PACKAGR_MGR_KEEP_LOCK_FILE) {
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "Berksfile.lock"))
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "Gemfile.lock"))
 	}
