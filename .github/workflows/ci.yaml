@@ -25,8 +25,8 @@ jobs:
           cd $PROJECT_PATH
 
           go mod vendor
-          mkdir -p /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/
-          cp /usr/local/linux/lib/pkgconfig/libgit2.pc /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/libgit2.pc
+          mkdir -p vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/
+          cp /usr/local/linux/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
           ./ci/test-build.sh ${{ matrix.package_type }}
       - name: Archive
         uses: actions/upload-artifact@v2
@@ -79,15 +79,15 @@ jobs:
           cd $PROJECT_PATH
 
           go mod vendor
-          mkdir -p /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/
+          mkdir -p vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/
 
           # build linux binary
-          cp /usr/local/linux/lib/pkgconfig/libgit2.pc /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/libgit2.pc
+          cp /usr/local/linux/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
           go test -v -tags "static" $(go list ./... | grep -v /vendor/)
           . /scripts/toolchains/linux/linux-build-env.sh && go build -mod vendor -ldflags "-X main.goos=linux -X main.goarch=amd64" -o packagr-releasr-linux-amd64 -tags "static" cmd/releasr/releasr.go
 
           # build mac binary
-          cp /usr/local/osx-ndk-x86/macports/pkgs/opt/local/lib/pkgconfig/libgit2.pc /go/pkg/mod/gopkg.in/libgit2/git2go.v25@v25.1.0/vendor/libgit2/build/libgit2.pc
+          cp /usr/local/osx-ndk-x86/macports/pkgs/opt/local/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
           . /scripts/toolchains/osx/osx-build-env.sh &&  go build -mod vendor -ldflags "-X main.goos=darwin -X main.goarch=amd64" -o packagr-releasr-darwin-amd64 -tags "static" cmd/releasr/releasr.go
 
           chmod +x packagr-releasr-linux-amd64
