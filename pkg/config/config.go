@@ -33,7 +33,7 @@ func (c *configuration) Init() error {
 	c.SetDefault(PACKAGR_PACKAGE_TYPE, "generic")
 	c.SetDefault(PACKAGR_SCM, "default")
 
-	c.SetDefault("engine_version_bump_msg", "Automated packaging of release by CapsuleCD")
+	c.SetDefault("engine_version_bump_msg", "Automated packaging of release by Packagr")
 	c.SetDefault("mgr_keep_lock_file", "false") //delete *.lock files by default.
 
 	//set the default system config file search path.

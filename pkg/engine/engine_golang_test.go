@@ -96,7 +96,7 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_PackageStep_WithoutLockFile
 	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_SCM_REPO_FULL_NAME).Return("AnalogJ/golang_analogj_test").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH).Return("github.com/analogj/golang_analogj_test").MinTimes(1)
-	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by Packagr").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_NAME).Return("CapsuleCD").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_EMAIL).Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
 

@@ -91,7 +91,7 @@ func (suite *EnginePythonTestSuite) TestEnginePython_ValidateTools() {
 func (suite *EnginePythonTestSuite) TestEnginePython_PackageStep() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by Packagr").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_NAME).Return("CapsuleCD").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_EMAIL).Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
 
