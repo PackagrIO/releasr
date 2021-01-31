@@ -25,6 +25,9 @@ jobs:
           cd $PROJECT_PATH
 
           go mod vendor
+
+          mkdir -p vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/
+          cp /usr/local/linux/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
           ./ci/test-build.sh ${{ matrix.package_type }}
       - name: Archive
         uses: actions/upload-artifact@v2
