@@ -42,12 +42,12 @@ func (g *engineGeneric) ValidateTools() error {
 
 func (g *engineGeneric) PackageStep() error {
 
-	signature := releasrUtils.GitSignature(g.Config.GetString("engine_git_author_name"), g.Config.GetString("engine_git_author_email"))
+	signature := releasrUtils.GitSignature(g.Config.GetString(config.PACKAGR_GIT_AUTHOR_NAME), g.Config.GetString(config.PACKAGR_GIT_AUTHOR_EMAIL))
 
-	if cerr := releasrUtils.GitCommit(g.PipelineData.GitLocalPath, fmt.Sprintf("(v%s) %s", g.NextMetadata.Version, g.Config.GetString("engine_version_bump_msg")), signature); cerr != nil {
+	if cerr := releasrUtils.GitCommit(g.PipelineData.GitLocalPath, fmt.Sprintf("(v%s) %s", g.NextMetadata.Version, g.Config.GetString(config.PACKAGR_VERSION_BUMP_MESSAGE)), signature); cerr != nil {
 		return cerr
 	}
-	tagCommit, terr := releasrUtils.GitTag(g.PipelineData.GitLocalPath, fmt.Sprintf("v%s", g.NextMetadata.Version), g.Config.GetString("engine_version_bump_msg"), signature)
+	tagCommit, terr := releasrUtils.GitTag(g.PipelineData.GitLocalPath, fmt.Sprintf("v%s", g.NextMetadata.Version), g.Config.GetString(config.PACKAGR_VERSION_BUMP_MESSAGE), signature)
 	if terr != nil {
 		return terr
 	}
@@ -72,7 +72,7 @@ func (g *engineGeneric) retrieveCurrentMetadata(gitLocalPath string) error {
 	major := 0
 	minor := 0
 	patch := 0
-	template := g.Config.GetString("generic_version_template")
+	template := g.Config.GetString(config.PACKAGR_GENERIC_VERSION_TEMPLATE)
 	fmt.Sscanf(strings.TrimSpace(string(versionContent)), template, &major, &minor, &patch)
 
 	g.NextMetadata.Version = fmt.Sprintf("%d.%d.%d", major, minor, patch)

@@ -77,8 +77,8 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_ValidateTools() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github").MinTimes(1)
-	suite.Config.EXPECT().GetString("scm_repo_full_name").Return("AnalogJ/golang_analogj_test").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_golang_package_path").Return("github.com/analogj/golang_analogj_test").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_SCM_REPO_FULL_NAME).Return("AnalogJ/golang_analogj_test").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH).Return("github.com/analogj/golang_analogj_test").MinTimes(1)
 
 	golangEngine, err := engine.Create(engine.PACKAGR_ENGINE_TYPE_GOLANG, suite.PipelineData, suite.Config, suite.Scm)
 	require.NoError(suite.T(), err)
@@ -93,12 +93,12 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_ValidateTools() {
 func (suite *EngineGolangTestSuite) TestEngineGolang_PackageStep_WithoutLockFiles() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().GetString("scm").Return("github").MinTimes(1)
-	suite.Config.EXPECT().GetString("scm_repo_full_name").Return("AnalogJ/golang_analogj_test").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_golang_package_path").Return("github.com/analogj/golang_analogj_test").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_version_bump_msg").Return("Automated packaging of release by CapsuleCD").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_git_author_name").Return("CapsuleCD").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_git_author_email").Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_SCM_REPO_FULL_NAME).Return("AnalogJ/golang_analogj_test").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH).Return("github.com/analogj/golang_analogj_test").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_NAME).Return("CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_EMAIL).Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
 
 	//copy cookbook fixture into a temp directory.
 	parentPath, err := ioutil.TempDir("", "")

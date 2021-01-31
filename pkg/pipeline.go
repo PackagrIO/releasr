@@ -68,23 +68,16 @@ func (p *Pipeline) Start(configData config.Interface) error {
 		return vterr
 	}
 
+	//package repository
+	//create/cleanup files for engine manager
 	log.Println("mgr_package_step")
 	if err := p.PackageManager.MgrPackageStep(p.Engine.GetNextMetadata()); err != nil {
 		return err
 	}
+
+	//package repo (create git commit & tag). Nothing is pushed here.
 	log.Println("package_step")
 	if err := p.Engine.PackageStep(); err != nil {
-		return err
-	}
-
-	//////func (p *Pipeline) MgrDistStep() error {
-	if p.Config.GetBool("mgr_disable_dist") {
-		log.Println("skipping mgr_dist_step.pre, mgr_dist_step, mgr_dist_step.post")
-		return nil
-	}
-
-	log.Println("mgr_dist_step")
-	if err := p.PackageManager.MgrDistStep(p.Engine.GetNextMetadata()); err != nil {
 		return err
 	}
 

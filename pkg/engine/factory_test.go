@@ -4,6 +4,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/packagrio/go-common/pipeline"
 	mockscm "github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/releasr/pkg/config"
 	"github.com/packagrio/releasr/pkg/config/mock"
 	"github.com/packagrio/releasr/pkg/engine"
 	"github.com/stretchr/testify/require"
@@ -62,12 +63,12 @@ func (suite *FactoryTestSuite) TestCreate_Chef() {
 func (suite *FactoryTestSuite) TestCreate_Golang() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().GetString("scm").Return("github")
-	suite.Config.EXPECT().GetString("scm_repo_full_name").Return("AnalogJ/golang_analogj_test")
-	suite.Config.EXPECT().GetString("engine_golang_package_path").Return("github.com/analogj/golang_analogj_test")
+	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github")
+	suite.Config.EXPECT().GetString(config.PACKAGR_SCM_REPO_FULL_NAME).Return("AnalogJ/golang_analogj_test")
+	suite.Config.EXPECT().GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH).Return("github.com/analogj/golang_analogj_test")
 
 	//test
-	testEngine, cerr := engine.Create("golang", suite.PipelineData, suite.Config, suite.Scm)
+	testEngine, cerr := engine.Create(engine.PACKAGR_ENGINE_TYPE_GOLANG, suite.PipelineData, suite.Config, suite.Scm)
 
 	//assert
 	require.NoError(suite.T(), cerr)

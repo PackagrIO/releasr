@@ -40,7 +40,7 @@ func (g *engineGolang) Init(pipelineData *pipeline.Data, configData config.Inter
 		scmDomain = "github.com"
 	}
 
-	g.Config.SetDefault("engine_golang_package_path", fmt.Sprintf("%s/%s", scmDomain, strings.ToLower(g.Config.GetString("scm_repo_full_name"))))
+	g.Config.SetDefault(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH, fmt.Sprintf("%s/%s", scmDomain, strings.ToLower(g.Config.GetString(config.PACKAGR_SCM_REPO_FULL_NAME))))
 
 	//TODO: figure out why setting the GOPATH workspace is causing the tools to timeout.
 	// golang recommends that your in-development packages are in the GOPATH and glide requires it to do glide install.
@@ -60,7 +60,7 @@ func (g *engineGolang) Init(pipelineData *pipeline.Data, configData config.Inter
 	//  the gopath bin directory should aslo be added to Path
 	os.Setenv("PATH", fmt.Sprintf("%s:%s", os.Getenv("PATH"), goPathBin))
 
-	packagePathPrefix := path.Dir(g.Config.GetString("engine_golang_package_path")) //strip out the repo name.
+	packagePathPrefix := path.Dir(g.Config.GetString(config.PACKAGR_ENGINE_GOLANG_PACKAGE_PATH)) //strip out the repo name.
 	// customize the git parent path for Golang Engine
 	g.PipelineData.GitParentPath = path.Join(g.PipelineData.GitParentPath, "src", packagePathPrefix)
 	os.MkdirAll(g.PipelineData.GitParentPath, 0666)
@@ -81,12 +81,12 @@ func (g *engineGolang) ValidateTools() error {
 }
 
 func (g *engineGolang) PackageStep() error {
-	signature := releasrUtils.GitSignature(g.Config.GetString("engine_git_author_name"), g.Config.GetString("engine_git_author_email"))
+	signature := releasrUtils.GitSignature(g.Config.GetString(config.PACKAGR_GIT_AUTHOR_NAME), g.Config.GetString(config.PACKAGR_GIT_AUTHOR_EMAIL))
 
-	if cerr := releasrUtils.GitCommit(g.PipelineData.GitLocalPath, fmt.Sprintf("(v%s) %s", g.NextMetadata.Version, g.Config.GetString("engine_version_bump_msg")), signature); cerr != nil {
+	if cerr := releasrUtils.GitCommit(g.PipelineData.GitLocalPath, fmt.Sprintf("(v%s) %s", g.NextMetadata.Version, g.Config.GetString(config.PACKAGR_VERSION_BUMP_MESSAGE)), signature); cerr != nil {
 		return cerr
 	}
-	tagCommit, terr := releasrUtils.GitTag(g.PipelineData.GitLocalPath, fmt.Sprintf("v%s", g.NextMetadata.Version), g.Config.GetString("engine_version_bump_msg"), signature)
+	tagCommit, terr := releasrUtils.GitTag(g.PipelineData.GitLocalPath, fmt.Sprintf("v%s", g.NextMetadata.Version), g.Config.GetString(config.PACKAGR_VERSION_BUMP_MESSAGE), signature)
 	if terr != nil {
 		return terr
 	}

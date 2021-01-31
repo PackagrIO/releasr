@@ -4,12 +4,9 @@ package mgr_test
 
 import (
 	"github.com/golang/mock/gomock"
-	"github.com/packagrio/go-common/metadata"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/releasr/pkg/config/mock"
-	"github.com/packagrio/releasr/pkg/mgr"
 	"github.com/packagrio/releasr/pkg/mgr/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -45,20 +42,4 @@ func (suite *MgrNodeNpmTestSuite) TearDownTest() {
 // a normal test function and pass our suite to suite.Run
 func TestMgrNodeNpm_TestSuite(t *testing.T) {
 	suite.Run(t, new(MgrNodeNpmTestSuite))
-}
-
-func (suite *MgrNodeNpmTestSuite) TestMgrNodeNpmTestSuite_MgrDistStep_WithoutCredentials() {
-	//setup
-	suite.Config.EXPECT().IsSet("npm_auth_token").Return(false).MinTimes(1)
-
-	//suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	mgrNodeNpm, err := mgr.Create("npm", suite.PipelineData, suite.Config, nil)
-	require.NoError(suite.T(), err)
-	nextVersion := new(metadata.NodeMetadata)
-
-	//test
-	berr := mgrNodeNpm.MgrDistStep(nextVersion)
-
-	//assert
-	require.Error(suite.T(), berr)
 }

@@ -4,12 +4,9 @@ package mgr_test
 
 import (
 	"github.com/golang/mock/gomock"
-	"github.com/packagrio/go-common/metadata"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/releasr/pkg/config/mock"
-	"github.com/packagrio/releasr/pkg/mgr"
 	"github.com/packagrio/releasr/pkg/mgr/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -45,18 +42,4 @@ func (suite *MgrGolangModTestSuite) TearDownTest() {
 // a normal test function and pass our suite to suite.Run
 func TestMgrGolangMod_TestSuite(t *testing.T) {
 	suite.Run(t, new(MgrGolangModTestSuite))
-}
-
-func (suite *MgrGolangModTestSuite) TestMgrGolangModTestSuite_MgrDistStep_WithoutCredentials() {
-	//setup
-	//suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	mgrGolangMod, err := mgr.Create("mod", suite.PipelineData, suite.Config, nil)
-	require.NoError(suite.T(), err)
-	nextVersion := new(metadata.GolangMetadata)
-
-	//test
-	berr := mgrGolangMod.MgrDistStep(nextVersion)
-
-	//assert
-	require.NoError(suite.T(), berr)
 }

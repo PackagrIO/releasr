@@ -45,9 +45,3 @@ func (m *mgrGolangMod) MgrPackageStep(nextMetadata interface{}) error {
 	}
 	return nil
 }
-
-func (m *mgrGolangMod) MgrDistStep(nextMetadata interface{}) error {
-	// no real packaging for golang.
-	// libraries are stored in version control.
-	return nil
-}

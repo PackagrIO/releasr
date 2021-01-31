@@ -28,7 +28,6 @@ func (c *configuration) Init() error {
 	//set defaults
 	c.SetDefault(PACKAGR_PACKAGE_TYPE, "generic")
 	c.SetDefault(PACKAGR_SCM, "default")
-	c.SetDefault(PACKAGR_VERSION_BUMP_TYPE, "patch")
 
 	c.SetDefault("engine_version_bump_msg", "Automated packaging of release by CapsuleCD")
 	c.SetDefault("mgr_keep_lock_file", "false") //delete *.lock files by default.

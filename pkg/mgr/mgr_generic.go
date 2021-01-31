@@ -35,7 +35,3 @@ func (m *mgrGeneric) MgrValidateTools() error {
 func (m *mgrGeneric) MgrPackageStep(nextMetadata interface{}) error {
 	return nil
 }
-
-func (m *mgrGeneric) MgrDistStep(nextMetadata interface{}) error {
-	return nil
-}

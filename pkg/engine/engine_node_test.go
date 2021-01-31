@@ -91,9 +91,9 @@ func (suite *EngineNodeTestSuite) TestEngineNode_PackageStep_WithoutLockFiles() 
 	//setup
 	//suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
 	//suite.Config.EXPECT().GetBool("mgr_keep_lock_file").Return(false).MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_version_bump_msg").Return("Automated packaging of release by CapsuleCD").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_git_author_name").Return("CapsuleCD").MinTimes(1)
-	suite.Config.EXPECT().GetString("engine_git_author_email").Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_NAME).Return("CapsuleCD").MinTimes(1)
+	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_EMAIL).Return("CapsuleCD@users.noreply.github.com").MinTimes(1)
 
 	//copy cookbook fixture into a temp directory.
 	parentPath, err := ioutil.TempDir("", "")

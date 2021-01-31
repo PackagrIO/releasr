@@ -1,12 +1,9 @@
 package mgr
 
 import (
-	"fmt"
-	"github.com/analogj/go-util/utils"
 	"github.com/packagrio/go-common/errors"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/releasr/pkg/config"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -49,49 +46,6 @@ func (m *mgrPythonPip) MgrValidateTools() error {
 func (m *mgrPythonPip) MgrPackageStep(nextMetadata interface{}) error {
 	if !m.Config.GetBool("mgr_keep_lock_file") {
 		os.Remove(path.Join(m.PipelineData.GitLocalPath, "requirements.txt"))
-	}
-	return nil
-}
-
-func (m *mgrPythonPip) MgrDistStep(nextMetadata interface{}) error {
-	if !m.Config.IsSet("pypi_username") || !m.Config.IsSet("pypi_password") {
-		return errors.MgrDistCredentialsMissing("Cannot deploy python package to pypi/warehouse, credentials missing")
-	}
-
-	pypircFile, _ := ioutil.TempFile("", ".pypirc")
-	defer os.Remove(pypircFile.Name())
-
-	// write the .pypirc config jfile.
-	pypircContent := fmt.Sprintf(utils.StripIndent(
-		`[distutils]
-		index-servers=pypi
-
-		[pypi]
-		repository = %s
-		username = %s
-		password = %s
-		`),
-		m.Config.GetString("pypi_repository"),
-		m.Config.GetString("pypi_username"),
-		m.Config.GetString("pypi_password"),
-	)
-
-	if _, perr := pypircFile.Write([]byte(pypircContent)); perr != nil {
-		return perr
-	}
-
-	pythonDistCmd := "python setup.py sdist"
-	if derr := utils.BashCmdExec(pythonDistCmd, m.PipelineData.GitLocalPath, nil, ""); derr != nil {
-		return errors.MgrDistPackageError("python setup.py sdist failed")
-	}
-
-	// using twine instead of setup.py (it supports HTTPS.)https://python-packaging-user-guide.readthedocs.org/en/latest/distributing/#uploading-your-project-to-pypi
-	pypiUploadCmd := fmt.Sprintf("twine upload --config-file %s  dist/*",
-		pypircFile.Name(),
-	)
-
-	if uerr := utils.BashCmdExec(pypiUploadCmd, m.PipelineData.GitLocalPath, nil, ""); uerr != nil {
-		return errors.MgrDistPackageError("twine package upload failed. Check log for exact error")
 	}
 	return nil
 }

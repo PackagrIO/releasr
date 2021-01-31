@@ -50,17 +50,15 @@ func main() {
 		Commands: []cli.Command{
 			{
 				Name:  "start",
-				Usage: "Start a new CapsuleCD package pipeline",
+				Usage: "Start releasr pipeline",
 				Action: func(c *cli.Context) error {
 
 					configuration, _ := config.Create()
 					configuration.Set(config.PACKAGR_SCM, c.String("scm"))
 					configuration.Set(config.PACKAGR_PACKAGE_TYPE, c.String("package_type"))
-					//config.Set("dry_run", c.String("dry_run"))
 
 					fmt.Println("package type:", configuration.GetString(config.PACKAGR_PACKAGE_TYPE))
 					fmt.Println("scm:", configuration.GetString(config.PACKAGR_SCM))
-					fmt.Println("bump type:", configuration.GetString(config.PACKAGR_VERSION_BUMP_TYPE))
 
 					pipeline := pkg.Pipeline{}
 					err := pipeline.Start(configuration)

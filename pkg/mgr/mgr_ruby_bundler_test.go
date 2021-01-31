@@ -4,12 +4,9 @@ package mgr_test
 
 import (
 	"github.com/golang/mock/gomock"
-	"github.com/packagrio/go-common/metadata"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/releasr/pkg/config/mock"
-	"github.com/packagrio/releasr/pkg/mgr"
 	"github.com/packagrio/releasr/pkg/mgr/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -45,20 +42,4 @@ func (suite *MgrRubyBundlerTestSuite) TearDownTest() {
 // a normal test function and pass our suite to suite.Run
 func TestMgrRubyBundler_TestSuite(t *testing.T) {
 	suite.Run(t, new(MgrRubyBundlerTestSuite))
-}
-
-func (suite *MgrRubyBundlerTestSuite) TestMgrRubyBundlerTestSuite_MgrDistStep_WithoutCredentials() {
-	//setup
-	//suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().IsSet("rubygems_api_key").MinTimes(1).Return(false)
-
-	mgrRubyBundler, err := mgr.Create("bundler", suite.PipelineData, suite.Config, nil)
-	require.NoError(suite.T(), err)
-	nextVersion := new(metadata.RubyMetadata)
-
-	//test
-	berr := mgrRubyBundler.MgrDistStep(nextVersion)
-
-	//assert
-	require.Error(suite.T(), berr)
 }
