@@ -2,9 +2,13 @@ package config
 
 import (
 	"encoding/base64"
+	stderrors "errors"
 	"fmt"
+	"github.com/analogj/go-util/utils"
 	"github.com/packagrio/go-common/errors"
 	"github.com/spf13/viper"
+	"log"
+	"os"
 )
 
 // When initializing this class the following methods must be called:
@@ -44,6 +48,25 @@ func (c *configuration) Init() error {
 	c.AutomaticEnv()
 	//CLI options will be added via the `Set()` function
 
+	return nil
+}
+
+func (c *configuration) ReadConfig(configFilePath string) error {
+
+	if !utils.FileExists(configFilePath) {
+		message := fmt.Sprintf("The configuration file (%s) could not be found. Skipping", configFilePath)
+		log.Printf(message)
+		return stderrors.New(message)
+	}
+
+	log.Printf("Loading configuration file: %s", configFilePath)
+
+	config_data, err := os.Open(configFilePath)
+	if err != nil {
+		log.Printf("Error reading configuration file: %s", err)
+		return err
+	}
+	c.MergeConfig(config_data)
 	return nil
 }
 

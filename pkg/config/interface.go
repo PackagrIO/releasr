@@ -19,6 +19,7 @@ type Interface interface {
 	GetStringSlice(key string) []string
 	UnmarshalKey(key string, rawVal interface{}, decoder ...viper.DecoderConfigOption) error
 	GetBase64Decoded(key string) (string, error)
+	ReadConfig(configFilePath string) error
 }
 
 const PACKAGR_PACKAGE_TYPE = "package_type"
