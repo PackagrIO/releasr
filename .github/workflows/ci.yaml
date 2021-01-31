@@ -83,7 +83,7 @@ jobs:
 
           # build linux binary
           cp /usr/local/linux/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
-          go test -v -tags "static" $(go list ./... | grep -v /vendor/)
+          go test -mod vendor -v -tags "static" $(go list ./... | grep -v /vendor/)
           . /scripts/toolchains/linux/linux-build-env.sh && go build -mod vendor -ldflags "-X main.goos=linux -X main.goarch=amd64" -o packagr-releasr-linux-amd64 -tags "static" cmd/releasr/releasr.go
 
           # build mac binary
