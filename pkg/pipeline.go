@@ -38,6 +38,11 @@ func (p *Pipeline) Start(configData config.Interface) error {
 	}
 	p.Engine = engineImpl
 
+	nerr := p.Engine.PopulateNextMetadata()
+	if nerr != nil {
+		return nerr
+	}
+
 	//initialize the manager
 	if p.Config.IsSet("mgr_type") {
 		manager, merr := mgr.Create(p.Config.GetString("mgr_type"), p.Data, p.Config, nil)

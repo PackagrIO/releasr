@@ -65,7 +65,7 @@ func (g *engineGolang) Init(pipelineData *pipeline.Data, configData config.Inter
 	g.PipelineData.GitParentPath = path.Join(g.PipelineData.GitParentPath, "src", packagePathPrefix)
 	os.MkdirAll(g.PipelineData.GitParentPath, 0666)
 
-	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+	return nil
 }
 
 func (g *engineGolang) GetNextMetadata() interface{} {
@@ -94,6 +94,10 @@ func (g *engineGolang) PackageStep() error {
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
+}
+
+func (g *engineGolang) PopulateNextMetadata() error {
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 //private Helpers

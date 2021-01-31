@@ -27,8 +27,7 @@ func (g *engineChef) Init(pipelineData *pipeline.Data, configData config.Interfa
 	g.Scm = sourceScm
 	g.PipelineData = pipelineData
 	g.NextMetadata = new(metadata.ChefMetadata)
-
-	return g.retrieveCurrentMetadata(pipelineData.GitLocalPath)
+	return nil
 }
 
 func (g *engineChef) GetNextMetadata() interface{} {
@@ -64,6 +63,10 @@ func (g *engineChef) PackageStep() error {
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
+}
+
+func (g *engineChef) PopulateNextMetadata() error {
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 //private Helpers

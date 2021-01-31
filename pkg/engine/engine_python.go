@@ -30,7 +30,7 @@ func (g *enginePython) Init(pipelineData *pipeline.Data, configData config.Inter
 
 	//set command defaults (can be overridden by repo/system configuration)
 	g.Config.SetDefault(config.PACKAGR_VERSION_METADATA_PATH, "VERSION")
-	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+	return nil
 }
 
 func (g *enginePython) GetNextMetadata() interface{} {
@@ -61,6 +61,10 @@ func (g *enginePython) PackageStep() error {
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
+}
+
+func (g *enginePython) PopulateNextMetadata() error {
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 //private Helpers

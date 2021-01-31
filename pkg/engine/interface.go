@@ -11,6 +11,7 @@ import (
 type Interface interface {
 	Init(pipelineData *pipeline.Data, config config.Interface, sourceScm scm.Interface) error
 
+	PopulateNextMetadata() error
 	GetNextMetadata() interface{}
 
 	// Validate that required executables are available for the following build/test/package/etc steps

@@ -39,7 +39,7 @@ func (g *engineRuby) Init(pipelineData *pipeline.Data, config config.Interface, 
 	g.NextMetadata = new(metadata.RubyMetadata)
 
 	//set command defaults (can be overridden by repo/system configuration)
-	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+	return nil
 }
 
 func (g *engineRuby) GetNextMetadata() interface{} {
@@ -68,6 +68,10 @@ func (g *engineRuby) PackageStep() error {
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
+}
+
+func (g *engineRuby) PopulateNextMetadata() error {
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 //private Helpers

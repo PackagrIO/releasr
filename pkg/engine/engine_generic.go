@@ -29,7 +29,7 @@ func (g *engineGeneric) Init(pipelineData *pipeline.Data, configData config.Inte
 	g.Config.SetDefault(config.PACKAGR_GENERIC_VERSION_TEMPLATE, `version := "%d.%d.%d"`)
 	g.Config.SetDefault(config.PACKAGR_VERSION_METADATA_PATH, "VERSION")
 
-	return g.retrieveCurrentMetadata(pipelineData.GitLocalPath)
+	return nil
 }
 
 func (g *engineGeneric) GetNextMetadata() interface{} {
@@ -55,6 +55,10 @@ func (g *engineGeneric) PackageStep() error {
 	g.PipelineData.ReleaseCommit = tagCommit
 	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
+}
+
+func (g *engineGeneric) PopulateNextMetadata() error {
+	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
 }
 
 //Helpers
