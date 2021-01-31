@@ -9,6 +9,7 @@ import (
 	"github.com/packagrio/go-common/scm"
 	"github.com/packagrio/releasr/pkg/config"
 	"github.com/packagrio/releasr/pkg/engine"
+	releasrUtils "github.com/packagrio/releasr/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
@@ -104,7 +105,7 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_PackageStep_WithoutLockFile
 	require.NoError(suite.T(), err)
 	defer os.RemoveAll(parentPath)
 	suite.PipelineData.GitParentPath = parentPath
-	cpath, cerr := utils.GitClone(parentPath, "golang_analogj_test", "https://github.com/AnalogJ/golang_analogj_test.git")
+	cpath, cerr := releasrUtils.GitClone(parentPath, "golang_analogj_test", "https://github.com/AnalogJ/golang_analogj_test.git")
 	require.NoError(suite.T(), cerr)
 	suite.PipelineData.GitLocalPath = cpath
 

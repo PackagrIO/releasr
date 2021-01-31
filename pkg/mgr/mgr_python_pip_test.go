@@ -3,13 +3,13 @@
 package mgr_test
 
 import (
+	"github.com/analogj/go-util/utils"
 	"github.com/golang/mock/gomock"
 	"github.com/packagrio/go-common/metadata"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/releasr/pkg/config/mock"
 	"github.com/packagrio/releasr/pkg/mgr"
 	"github.com/packagrio/releasr/pkg/mgr/mock"
-	"github.com/packagrio/releasr/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"

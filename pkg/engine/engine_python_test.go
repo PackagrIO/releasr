@@ -8,8 +8,12 @@ import (
 	"github.com/packagrio/go-common/scm"
 	"github.com/packagrio/releasr/pkg/config"
 	"github.com/packagrio/releasr/pkg/engine"
+	releasrUtils "github.com/packagrio/releasr/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"io/ioutil"
+	"os"
+
 	//"path/filepath"
 	"github.com/packagrio/go-common/scm/mock"
 	"github.com/packagrio/releasr/pkg/config/mock"
@@ -96,7 +100,7 @@ func (suite *EnginePythonTestSuite) TestEnginePython_PackageStep() {
 	require.NoError(suite.T(), err)
 	defer os.RemoveAll(parentPath)
 	suite.PipelineData.GitParentPath = parentPath
-	cpath, cerr := utils.GitClone(parentPath, "pip_analogj_test", "https://github.com/AnalogJ/pip_analogj_test.git")
+	cpath, cerr := releasrUtils.GitClone(parentPath, "pip_analogj_test", "https://github.com/AnalogJ/pip_analogj_test.git")
 	require.NoError(suite.T(), cerr)
 	suite.PipelineData.GitLocalPath = cpath
 

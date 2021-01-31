@@ -4,15 +4,34 @@ import (
 	stderrors "errors"
 	"fmt"
 	"github.com/analogj/go-util/utils"
+	"github.com/packagrio/go-common/errors"
 	"github.com/packagrio/go-common/pipeline"
 	git2go "gopkg.in/libgit2/git2go.v25"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
 )
+
+// Clone a git repo into a local directory.
+// Credentials need to be specified by embedding in gitRemote url.
+// TODO: this pattern may not work on Bitbucket/GitLab
+func GitClone(parentPath string, repositoryName string, gitRemote string) (string, error) {
+	absPath, _ := filepath.Abs(path.Join(parentPath, repositoryName))
+
+	if !utils.FileExists(absPath) {
+		os.MkdirAll(absPath, os.ModePerm)
+	} else {
+		return "", errors.ScmFilesystemError(fmt.Sprintf("The local repository path already exists, this should never happen. %s", absPath))
+	}
+
+	_, err := git2go.Clone(gitRemote, absPath, new(git2go.CloneOptions))
+	return absPath, err
+}
 
 //Add all modified files to index, and commit.
 func GitCommit(repoPath string, message string, signature *git2go.Signature) error {
