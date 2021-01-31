@@ -76,7 +76,6 @@ func TestEngineGolang_TestSuite(t *testing.T) {
 func (suite *EngineGolangTestSuite) TestEngineGolang_ValidateTools() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github").MinTimes(1)
 	golangEngine, err := engine.Create(engine.PACKAGR_ENGINE_TYPE_GOLANG, suite.PipelineData, suite.Config, suite.Scm)
 	require.NoError(suite.T(), err)
 
@@ -90,7 +89,6 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_ValidateTools() {
 func (suite *EngineGolangTestSuite) TestEngineGolang_PackageStep_WithoutLockFiles() {
 	//setup
 	suite.Config.EXPECT().SetDefault(gomock.Any(), gomock.Any()).MinTimes(1)
-	suite.Config.EXPECT().GetString(config.PACKAGR_SCM).Return("github").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_VERSION_BUMP_MESSAGE).Return("Automated packaging of release by Packagr").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_NAME).Return("Packagr").MinTimes(1)
 	suite.Config.EXPECT().GetString(config.PACKAGR_GIT_AUTHOR_EMAIL).Return("Packagrio@users.noreply.github.com").MinTimes(1)
