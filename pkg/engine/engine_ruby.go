@@ -66,12 +66,16 @@ func (g *engineRuby) PackageStep() error {
 	}
 
 	g.PipelineData.ReleaseCommit = tagCommit
-	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
 }
 
-func (g *engineRuby) PopulateNextMetadata() error {
-	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+func (g *engineRuby) PopulateReleaseVersion() error {
+	err := g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+	if err != nil {
+		return err
+	}
+	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
+	return nil
 }
 
 //private Helpers

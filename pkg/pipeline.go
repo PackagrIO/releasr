@@ -36,7 +36,11 @@ func (p *Pipeline) Start(configData config.Interface) error {
 		return err
 	}
 
-	if err := p.Engine.PopulateNextMetadata(); err != nil {
+	if err := p.ValidateTools(); err != nil {
+		return err
+	}
+
+	if err := p.Engine.PopulateReleaseVersion(); err != nil {
 		return err
 	}
 
@@ -46,9 +50,6 @@ func (p *Pipeline) Start(configData config.Interface) error {
 	}
 
 	// validate tools
-	if err := p.ValidateTools(); err != nil {
-		return err
-	}
 	if err := p.MgrValidateTools(); err != nil {
 		return err
 	}

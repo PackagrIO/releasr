@@ -53,12 +53,16 @@ func (g *engineGeneric) PackageStep() error {
 	}
 
 	g.PipelineData.ReleaseCommit = tagCommit
-	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
 	return nil
 }
 
-func (g *engineGeneric) PopulateNextMetadata() error {
-	return g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+func (g *engineGeneric) PopulateReleaseVersion() error {
+	err := g.retrieveCurrentMetadata(g.PipelineData.GitLocalPath)
+	if err != nil {
+		return err
+	}
+	g.PipelineData.ReleaseVersion = g.NextMetadata.Version
+	return nil
 }
 
 //Helpers
