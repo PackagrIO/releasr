@@ -20,6 +20,8 @@ jobs:
       - name: Bump version
         id: bump_version
         uses: packagrio/action-bumpr-go@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           version_bump_type: ${{ github.event.inputs.version_bump_type }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
