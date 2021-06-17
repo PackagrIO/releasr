@@ -91,16 +91,6 @@ func (p *Pipeline) ParseRepoConfig() error {
 		log.Println("No repo capsule.yml file found, using existing config.")
 	}
 
-	if p.Config.IsSet("scm_release_assets") {
-		//unmarshall config data.
-		parsedAssets := new([]pipeline.ScmReleaseAsset)
-		if err := p.Config.UnmarshalKey("scm_release_assets", parsedAssets); err != nil {
-			return err
-		}
-
-		//append the parsed Assets to the current ReleaseAssets storage (incase assets were defined in system yml)
-		p.Data.ReleaseAssets = append(p.Data.ReleaseAssets, (*parsedAssets)...)
-	}
 	return nil
 }
 
