@@ -153,6 +153,8 @@ github.com/packagrio/go-common v0.0.0-20200905211759-7bedcc5de2b9 h1:y8PgaL9Z8ue
 github.com/packagrio/go-common v0.0.0-20200905211759-7bedcc5de2b9/go.mod h1:Ayf6caXlPa4tVRpI1xbvf4queA0rt3zbi8g9ef0ZDKA=
 github.com/packagrio/go-common v0.0.0-20210616041057-c524d36c11d1 h1:EDYfF9pbtzDRhaIw5x8tVNVuostkbkpaMSyqjgLEFAc=
 github.com/packagrio/go-common v0.0.0-20210616041057-c524d36c11d1/go.mod h1:MqYLhRnroBE4sEqHQfRdBVlXkzXjXY+EU4dLROCadQA=
+github.com/packagrio/go-common v0.0.2 h1:aP2iM01AZOBy8V/PoDLONzn5/1G/oz+H9lnwsHQewic=
+github.com/packagrio/go-common v0.0.2/go.mod h1:FP3yg500eI/khJdj+AjnbhlHdpsbbyT85hquoxe/N28=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
 github.com/pelletier/go-toml v1.2.0 h1:T5zMGML61Wp+FlcbWjRDT7yAxhJNAiPPLOFECq181zc=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
@@ -208,6 +210,7 @@ github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/urfave/cli v1.22.5 h1:lNq9sAHXK2qfdI8W+GRItjCEkI+2oR4d+MEHy1CKXoU=
 github.com/urfave/cli v1.22.5/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
+github.com/whilp/git-urls v1.0.0/go.mod h1:J16SAmobsqc3Qcy98brfl5f5+e0clUvg1krgwk/qCfE=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
