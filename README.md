@@ -6,6 +6,19 @@
   </a>
 </p>
 
+# Usage
+
+```
+cd /path/to/git/repo
+git log
+# commit 1b98710322765393ac839b9315619d8b94b945d5 (HEAD -> master, origin/master)
+
+packagr-releasr start --scm github --package_type golang
+
+git log
+# commit 2477cbc9df830d79bf08922162ad8594b4cf173b (tag: v1.0.86)
+```
+
 
 # Inputs
 - `package_type`
