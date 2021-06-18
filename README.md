@@ -1,3 +1,11 @@
+# Releasr
+
+<p align="center">
+  <a href="https://github.com/PackagrIO/docs">
+  <img width="300" alt="portfolio_view" src="https://github.com/PackagrIO/releasr/raw/master/images/logo.png">
+  </a>
+</p>
+
 
 # Inputs
 - `package_type`
@@ -11,3 +19,8 @@
 
 # Outputs
 N/A
+
+
+# Logo
+
+- [Tag By Travis Avery, US](https://thenounproject.com/search/?q=tag&i=2453778)
