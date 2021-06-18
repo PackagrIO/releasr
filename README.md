@@ -6,6 +6,11 @@
   </a>
 </p>
 
+Language agnostic tool to package a git repo. Commit any local changes and create a git tag. It should also generate artifacts. Nothing should be pushed to remote repository
+
+# Documentation
+Full documentation is available at [PackagrIO/docs](https://github.com/PackagrIO/docs)
+
 # Usage
 
 ```
