@@ -11,12 +11,14 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container: analogj/capsulecd-build
+    container: ghcr.io/packagrio/packagr-dev:master
     env:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Bump version
         id: bump_version
         uses: packagrio/action-bumpr-go@master
@@ -30,7 +32,6 @@ jobs:
           GOOS: linux
           GOARCH: amd64
         run: |
-
           mkdir -p $PROJECT_PATH
           cp -a $GITHUB_WORKSPACE/. $PROJECT_PATH/
           cd $PROJECT_PATH
@@ -43,79 +44,23 @@ jobs:
           # build linux binary
           . /scripts/toolchains/linux/linux-build-env.sh && go build -mod vendor -ldflags "-X main.goos=linux -X main.goarch=amd64" -o packagr-releasr-linux-amd64 -tags "static" cmd/releasr/releasr.go
 
-          # build mac binary
-          cp /usr/local/osx-ndk-x86/macports/pkgs/opt/local/lib/pkgconfig/libgit2.pc vendor/gopkg.in/libgit2/git2go.v25/vendor/libgit2/build/libgit2.pc
-          . /scripts/toolchains/osx/osx-build-env.sh &&  go build -mod vendor -ldflags "-X main.goos=darwin -X main.goarch=amd64" -o packagr-releasr-darwin-amd64 -tags "static" cmd/releasr/releasr.go
-
-
           chmod +x packagr-releasr-linux-amd64
-          chmod +x packagr-releasr-darwin-amd64
           ./packagr-releasr-linux-amd64 --help
           echo "listing linked libraries" && ldd packagr-releasr-linux-amd64
 
-      - name: Commit
-        uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
-        with:
-
-          # The name of the user that will be displayed as the author of the commit
-          # Default: author of the commit that triggered the run
-          author_name: Jason Kulatunga
-
-          # The email of the user that will be displayed as the author of the commit
-          # Default: author of the commit that triggered the run
-          author_email: jason@thesparktree.com
-
-          # The local path to the directory where your repository is located. You should use actions/checkout first to set it up
-          # Default: '.'
-          cwd: ${{ env.PROJECT_PATH }}
-
-          # Whether to use the --force option on `git add`, in order to bypass eventual gitignores
-          # Default: false
-          force: false
-
-          # Whether to use the --signoff option on `git commit`
-          # Default: false
-          signoff: true
-
-          # The message for the commit
-          # Default: 'Commit from GitHub Actions'
-          message: '(${{steps.bump_version.outputs.release_version}}) Automated packaging of release by Packagr'
-
-          # Name of the tag to add to the new commit (see the paragraph below for more info)
-          # Default: ''
-          tag: ${{steps.bump_version.outputs.release_version}}
-
+          # restore modified dir to GH workspace.
+          cp -arf $PROJECT_PATH/. $GITHUB_WORKSPACE/
+      - name: Commit Changes
+        id: commit
+        uses: packagrio/action-releasr-go@master
         env:
           # This is necessary in order to push a commit to the repo
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Publish Release
+        id: publish
+        uses: packagrio/action-publishr-go@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # This is necessary in order to push a commit to the repo
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
         with:
-          tag_name: ${{ steps.bump_version.outputs.release_version }}
-          release_name: Release ${{ steps.bump_version.outputs.release_version }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ${{ env.PROJECT_PATH }}/packagr-releasr-linux-amd64
-          asset_name: packagr-releasr-linux-amd64
-          asset_content_type: application/octet-stream
-      - name: Upload Release Asset
-        id: upload-release-asset-darwin
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ${{ env.PROJECT_PATH }}/packagr-releasr-darwin-amd64
-          asset_name: packagr-releasr-darwin-amd64
-          asset_content_type: application/octet-stream
+          upload_assets: 'packagr-releasr-linux-amd64'
