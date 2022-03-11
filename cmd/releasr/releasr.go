@@ -54,6 +54,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 
 					configuration, _ := config.Create()
+					
 					if c.IsSet("scm") {
 						configuration.Set(config.PACKAGR_SCM, c.String("scm"))
 					}
