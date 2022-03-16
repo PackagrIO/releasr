@@ -37,7 +37,7 @@ jobs:
     name: Test
     needs: build-test
     runs-on: ubuntu-latest
-    container: "packagrio/packagr:latest-${{ matrix.package_type }}"
+    container: "ghcr.io/packagrio/packagr:latest-${{ matrix.package_type }}"
 
     strategy:
       matrix:
