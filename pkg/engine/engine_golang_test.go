@@ -10,13 +10,14 @@ import (
 	"github.com/packagrio/releasr/pkg/config"
 	"github.com/packagrio/releasr/pkg/engine"
 	releasrUtils "github.com/packagrio/releasr/pkg/utils"
+	mock_scm "github.com/packagrio/go-common/scm/mock"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
-	"path"
-	"github.com/packagrio/go-common/scm/mock"
-	"github.com/packagrio/releasr/pkg/config/mock"
 	"os"
+	"path"
+	"net/http"
 	"testing"
 )
 
@@ -28,7 +29,7 @@ func TestEngineGolang_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "golang")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData, testConfig, nil)
+	githubScm, err := scm.Create("github", pipelineData, testConfig,  &http.Client{})
 	require.NoError(t, err)
 
 	//test

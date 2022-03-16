@@ -12,9 +12,11 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	//"path/filepath"
-	"github.com/packagrio/go-common/scm/mock"
-	"github.com/packagrio/releasr/pkg/config/mock"
+	mock_scm "github.com/packagrio/go-common/scm/mock"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"testing"
+	"net/http"
+
 )
 
 func TestEngineRuby_Create(t *testing.T) {
@@ -25,7 +27,7 @@ func TestEngineRuby_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "ruby")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData, testConfig, nil)
+	githubScm, err := scm.Create("github", pipelineData, testConfig,  &http.Client{})
 	require.NoError(t, err)
 
 	//test
