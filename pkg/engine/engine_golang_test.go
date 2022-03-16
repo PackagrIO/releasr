@@ -14,9 +14,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
 	"path"
-	//"path/filepath"
-	"github.com/packagrio/go-common/scm/mock"
-	"github.com/packagrio/releasr/pkg/config/mock"
+
 	"os"
 	"testing"
 )
@@ -29,7 +27,7 @@ func TestEngineGolang_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "golang")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData)
+	githubScm, err := scm.Create("github", pipelineData, testConfig, nil)
 	require.NoError(t, err)
 
 	//test
