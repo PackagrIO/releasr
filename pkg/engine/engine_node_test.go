@@ -18,6 +18,7 @@ import (
 	mock_scm "github.com/packagrio/go-common/scm/mock"
 	"github.com/packagrio/releasr/pkg/config/mock"
 	"os"
+	"net/http"
 	"testing"
 )
 
@@ -29,7 +30,7 @@ func TestEngineNode_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "node")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData, testConfig, nil)
+	githubScm, err := scm.Create("github", pipelineData, testConfig,  http.Client{})
 	require.NoError(t, err)
 
 	//test
