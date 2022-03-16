@@ -14,7 +14,8 @@ import (
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
 	"path"
-
+	"github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/releasr/pkg/config/mock"
 	"os"
 	"testing"
 )

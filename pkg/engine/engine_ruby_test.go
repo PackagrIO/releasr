@@ -11,6 +11,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	//"path/filepath"
+	"github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/releasr/pkg/config/mock"
 	"testing"
 )
 

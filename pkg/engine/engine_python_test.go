@@ -14,6 +14,9 @@ import (
 	"io/ioutil"
 	"os"
 
+	//"path/filepath"
+	"github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/releasr/pkg/config/mock"
 	"testing"
 )
 
