@@ -16,7 +16,7 @@ import (
 	"path"
 	//"path/filepath"
 	mock_scm "github.com/packagrio/go-common/scm/mock"
-	mock_config "github.com/packagrio/go-common/config/mock"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"os"
 	"net/http"
 	"testing"

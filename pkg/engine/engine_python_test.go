@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	mock_scm "github.com/packagrio/go-common/scm/mock"
-	mock_config "github.com/packagrio/go-common/config/mock"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"io/ioutil"
 	"os"
 	"net/http"
