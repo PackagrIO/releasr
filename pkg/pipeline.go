@@ -31,11 +31,6 @@ func (p *Pipeline) Start(configData config.Interface) error {
 		return err
 	}
 
-	//Parse Repo config if present.
-	if err := p.ParseRepoConfig(); err != nil {
-		return err
-	}
-
 	if err := p.ValidateTools(); err != nil {
 		return err
 	}
@@ -68,6 +63,9 @@ func (p *Pipeline) PipelineInitStep() error {
 	p.Data.GitParentPath = filepath.Dir(cwdPath)
 
 	//assumes that this is a git repository, and version file has already been bumped (using Bumpr)
+	if err := p.ParseRepoConfig(); err != nil {
+		return err
+	}
 
 	//Generate a new instance of the engine
 	engineImpl, eerr := engine.Create(p.Config.GetString("package_type"), p.Data, p.Config, p.Scm)
