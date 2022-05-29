@@ -1,0 +1,7 @@
+package_type: generic
+scm: default
+engine_version_bump_msg: 'Automated packaging of release by Packagr'
+mgr_keep_lock_file: false
+engine_git_author_name: Packagr
+engine_git_author_email: 'Packagrio@users.noreply.github.com'
+engine_repo_config_path: 'packagr.yml'
