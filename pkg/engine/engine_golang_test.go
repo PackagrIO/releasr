@@ -1,3 +1,4 @@
+//go:build golang
 // +build golang
 
 package engine_test
@@ -7,17 +8,17 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/go-common/scm"
-	"github.com/packagrio/releasr/pkg/config"
-	"github.com/packagrio/releasr/pkg/engine"
-	releasrUtils "github.com/packagrio/releasr/pkg/utils"
 	mock_scm "github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/go-common/utils/git"
+	"github.com/packagrio/releasr/pkg/config"
 	mock_config "github.com/packagrio/releasr/pkg/config/mock"
+	"github.com/packagrio/releasr/pkg/engine"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path"
-	"net/http"
 	"testing"
 )
 
@@ -29,7 +30,7 @@ func TestEngineGolang_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "golang")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData, testConfig,  &http.Client{})
+	githubScm, err := scm.Create("github", pipelineData, testConfig, &http.Client{})
 	require.NoError(t, err)
 
 	//test
@@ -98,7 +99,7 @@ func (suite *EngineGolangTestSuite) TestEngineGolang_PackageStep_WithoutLockFile
 	require.NoError(suite.T(), err)
 	defer os.RemoveAll(parentPath)
 	suite.PipelineData.GitParentPath = parentPath
-	cpath, cerr := releasrUtils.GitClone(parentPath, "golang_analogj_test", "https://github.com/AnalogJ/golang_analogj_test.git")
+	cpath, cerr := git.GitClone(parentPath, "golang_analogj_test", "https://github.com/AnalogJ/golang_analogj_test.git")
 	require.NoError(suite.T(), cerr)
 	suite.PipelineData.GitLocalPath = cpath
 

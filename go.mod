@@ -10,7 +10,6 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
 	github.com/urfave/cli v1.22.5
-	gopkg.in/libgit2/git2go.v25 v25.1.0
 	gopkg.in/yaml.v2 v2.3.0
 )
 
