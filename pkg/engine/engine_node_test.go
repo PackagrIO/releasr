@@ -1,3 +1,4 @@
+//go:build node
 // +build node
 
 package engine_test
@@ -7,9 +8,9 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/go-common/scm"
+	"github.com/packagrio/go-common/utils/git"
 	"github.com/packagrio/releasr/pkg/config"
 	"github.com/packagrio/releasr/pkg/engine"
-	releasrUtils "github.com/packagrio/releasr/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"io/ioutil"
@@ -17,8 +18,8 @@ import (
 	//"path/filepath"
 	mock_scm "github.com/packagrio/go-common/scm/mock"
 	mock_config "github.com/packagrio/releasr/pkg/config/mock"
-	"os"
 	"net/http"
+	"os"
 	"testing"
 )
 
@@ -30,7 +31,7 @@ func TestEngineNode_Create(t *testing.T) {
 	testConfig.Set(config.PACKAGR_SCM, "github")
 	testConfig.Set(config.PACKAGR_PACKAGE_TYPE, "node")
 	pipelineData := new(pipeline.Data)
-	githubScm, err := scm.Create("github", pipelineData, testConfig,  &http.Client{})
+	githubScm, err := scm.Create("github", pipelineData, testConfig, &http.Client{})
 	require.NoError(t, err)
 
 	//test
@@ -101,7 +102,7 @@ func (suite *EngineNodeTestSuite) TestEngineNode_PackageStep_WithoutLockFiles() 
 	require.NoError(suite.T(), err)
 	defer os.RemoveAll(parentPath)
 	suite.PipelineData.GitParentPath = parentPath
-	cpath, cerr := releasrUtils.GitClone(parentPath, "npm_analogj_test", "https://github.com/AnalogJ/npm_analogj_test.git")
+	cpath, cerr := git.GitClone(parentPath, "npm_analogj_test", "https://github.com/AnalogJ/npm_analogj_test.git")
 	require.NoError(suite.T(), cerr)
 	suite.PipelineData.GitLocalPath = cpath
 

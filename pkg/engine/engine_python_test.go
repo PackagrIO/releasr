@@ -1,3 +1,4 @@
+//go:build python
 // +build python
 
 package engine_test
@@ -6,16 +7,16 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/packagrio/go-common/pipeline"
 	"github.com/packagrio/go-common/scm"
+	mock_scm "github.com/packagrio/go-common/scm/mock"
+	"github.com/packagrio/go-common/utils/git"
 	"github.com/packagrio/releasr/pkg/config"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"github.com/packagrio/releasr/pkg/engine"
-	releasrUtils "github.com/packagrio/releasr/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	mock_scm "github.com/packagrio/go-common/scm/mock"
-	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"io/ioutil"
-	"os"
 	"net/http"
+	"os"
 
 	"testing"
 )
@@ -100,7 +101,7 @@ func (suite *EnginePythonTestSuite) TestEnginePython_PackageStep() {
 	require.NoError(suite.T(), err)
 	defer os.RemoveAll(parentPath)
 	suite.PipelineData.GitParentPath = parentPath
-	cpath, cerr := releasrUtils.GitClone(parentPath, "pip_analogj_test", "https://github.com/AnalogJ/pip_analogj_test.git")
+	cpath, cerr := git.GitClone(parentPath, "pip_analogj_test", "https://github.com/AnalogJ/pip_analogj_test.git")
 	require.NoError(suite.T(), cerr)
 	suite.PipelineData.GitLocalPath = cpath
 
