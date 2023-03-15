@@ -10,6 +10,7 @@ import (
 	mock_scm "github.com/packagrio/go-common/scm/mock"
 	"github.com/packagrio/go-common/utils/git"
 	"github.com/packagrio/releasr/pkg/config"
+	mock_config "github.com/packagrio/releasr/pkg/config/mock"
 	"github.com/packagrio/releasr/pkg/engine"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
