@@ -11,10 +11,10 @@ jobs:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     strategy:
       matrix:
-        package_type: ['chef', 'golang', 'node', 'python', 'ruby']
+        package_type: ['chef', 'golang', 'node', 'python', 'ruby', 'generic']
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build Test Binaries
         env:
           GOOS: linux
@@ -27,7 +27,7 @@ jobs:
           go mod vendor
           ./ci/test-build.sh ${{ matrix.package_type }}
       - name: Archive
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "test-binary-${{ matrix.package_type }}"
           path: /caches/test-binaries/
@@ -35,28 +35,41 @@ jobs:
     name: Test
     needs: build-test
     runs-on: ubuntu-latest
-    container: "ghcr.io/packagrio/packagr:latest-${{ matrix.package_type }}"
+    container: "ghcr.io/packagrio/packagr:${{ matrix.package_type.image_tag }}"
 
     strategy:
       matrix:
-        package_type: ['chef', 'golang', 'node', 'python', 'ruby']
+        package_type:
+          - name: chef
+            image_tag: latest-chef
+          - name: golang
+            image_tag: latest-golang
+          - name: node
+            image_tag: latest-node
+          - name: python
+            image_tag: latest-python
+          - name: ruby
+            image_tag: latest-ruby
+          - name: generic
+            image_tag: latest-ubuntu
+      fail-fast: false
     steps:
       - name: Download test binaries
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
-          name: "test-binary-${{ matrix.package_type }}"
+          name: "test-binary-${{ matrix.package_type.name }}"
       - name: Test
         env:
           GOOS: linux
           GOARCH: amd64
         run: |
           chmod -R +x .
-          ./test-execute.sh ${{ matrix.package_type }}
+          ./test-execute.sh ${{ matrix.package_type.name }}
       - name: Archive
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: test-coverage
-          path: /coverage/coverage-${{ matrix.package_type }}.txt
+          name: test-coverage-${{ matrix.package_type.name }}
+          path: /coverage/coverage-${{ matrix.package_type.name }}.txt
 
   build:
     name: Build
@@ -66,7 +79,7 @@ jobs:
       PROJECT_PATH: /go/src/github.com/packagrio/releasr
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build
         env:
           GOOS: linux
@@ -91,12 +104,12 @@ jobs:
           echo "listing linked libraries" && ldd packagr-releasr-linux-amd64
 
       - name: Archive
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: releasr-linux-binary
           path: ${{ env.PROJECT_PATH }}/packagr-releasr-linux-amd64
       - name: Archive
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: releasr-mac-binary
           path: ${{ env.PROJECT_PATH }}/packagr-releasr-darwin-amd64
